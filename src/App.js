@@ -5,7 +5,7 @@ import { useEffect, useState, useCallback } from "react";
 function App() {
   const [client, setClient] = useState();
   const [pairing, setPairing] = useState();
-
+  console.log(process.env)
   const creatSignClient = useCallback(async () => {
     try {
       const signClient = await SignClient.init({
@@ -17,7 +17,6 @@ function App() {
           icons: ["https://walletconnect.com/walletconnect-logo.png"],
         },
       });
-      console.log('signClient', signClient)
       setClient(signClient)
     } catch (e) {
       console.error(e);
@@ -25,7 +24,6 @@ function App() {
   })
 
   useEffect(() => {
-    console.log('does client exist: ', client)
     if(!client){
       creatSignClient()
     }
@@ -60,10 +58,8 @@ function App() {
           console.log("EVENT", "QR Code Modal closed");
         });
       }
-
       const session = await approval();
     } catch (e) {
-      console.log('error:')
       console.error(e);
       // ignore rejection
     } finally {
@@ -74,7 +70,7 @@ function App() {
 
   return (
     <div>
-      <h1>Welcome</h1>
+      <h1>Sign V2</h1>
       <button onClick={handleConnect}>Connect</button>
     </div>
   );
