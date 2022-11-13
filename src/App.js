@@ -5,11 +5,10 @@ import { useEffect, useState, useCallback } from "react";
 function App() {
   const [client, setClient] = useState();
   const [pairing, setPairing] = useState();
-  console.log(process.env)
   const creatSignClient = useCallback(async () => {
     try {
       const signClient = await SignClient.init({
-        projectId: "9338b83ff89083cd0ee7da8cea475c23",
+        projectId: process.env.REACT_APP_PROJECT_ID,
         metadata: {
           name: "Example Dapp",
           description: "Example Dapp",
@@ -42,7 +41,7 @@ function App() {
             "personal_sign",
             "eth_signTypedData",
           ],
-          chains: ["eip155:1"],
+          chains: ["eip155:5"],
           events: ["chainChanged", "accountsChanged"],
         },
       };
