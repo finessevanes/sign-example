@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useWalletConnectClient } from "./context/ClientContext";
 
 function App() {
-  const [isSession, setIsSession] = useState(false);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
   const {
     pairings,
@@ -15,14 +15,32 @@ function App() {
   } = useWalletConnectClient();
 
   const onConnect = () => {
-    console.log("on connect");
-    connect();
+    try {
+      if (client){
+        connect();
+      }
+    } catch(e){
+      console.log(e)
+    }
+  };
+
+  const onDisconnect = () => {
+    disconnect();
   };
 
   return (
-    <div>
+    <div className="app">
       <h1>Sign V2</h1>
-      { session ? <h1>You are connected </h1> :  <button onClick={onConnect}>Connect</button>}
+      {!accounts.length ? (
+        <button onClick={onConnect} disabled={!client}>Connect</button>
+      ) : (
+        <>
+        <h2>{`${accounts[0].slice(9).slice(0, 5)} ... ${accounts[0].slice(9).slice(37)}`}</h2>
+        <button>eth_sendTransaction</button>
+        <button>personal_sign</button>
+        <button onClick={onDisconnect}>Disconnect</button>
+        </>
+      )}
     </div>
   );
 }

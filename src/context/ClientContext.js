@@ -37,30 +37,6 @@ export function ClientContextProvider({ children }) {
     setChains([]);
   };
 
-  //   const getAccountBalances = async (_accounts: string[]) => {
-  //     setIsFetchingBalances(true);
-  //     try {
-  //       const arr = await Promise.all(
-  //         _accounts.map(async (account) => {
-  //           const [namespace, reference, address] = account.split(":");
-  //           const chainId = `${namespace}:${reference}`;
-  //           const assets = await apiGetAccountBalance(address, chainId);
-  //           return { account, assets: [assets] };
-  //         })
-  //       );
-
-  //       const balances: AccountBalances = {};
-  //       arr.forEach(({ account, assets }) => {
-  //         balances[account] = assets;
-  //       });
-  //       setBalances(balances);
-  //     } catch (e) {
-  //       console.error(e);
-  //     } finally {
-  //       setIsFetchingBalances(false);
-  //     }
-  //   };
-
   const onSessionConnected = useCallback(async (_session) => {
     const allNamespaceAccounts = Object.values(_session.namespaces)
       .map((namespace) => namespace.accounts)
@@ -109,9 +85,7 @@ export function ClientContextProvider({ children }) {
         setPairings(client.pairing.getAll({ active: true }));
       } catch (e) {
         console.error(e);
-        // ignore rejection
       } finally {
-        // close modal in case it was open
         QRCodeModal.close();
       }
     },
@@ -134,34 +108,33 @@ export function ClientContextProvider({ children }) {
   }, [client, session]);
 
   const _subscribeToEvents = useCallback(
-    console.log("_subscribeToEvents")
-    // async (_client) => {
-    //   if (typeof _client === "undefined") {
-    //     throw new Error("WalletConnect is not initialized");
-    //   }
+    async (_client) => {
+      if (typeof _client === "undefined") {
+        throw new Error("WalletConnect is not initialized");
+      }
 
-    //   _client.on("session_ping", (args) => {
-    //     console.log("EVENT", "session_ping", args);
-    //   });
+      _client.on("session_ping", (args) => {
+        console.log("EVENT", "session_ping", args);
+      });
 
-    //   _client.on("session_event", (args) => {
-    //     console.log("EVENT", "session_event", args);
-    //   });
+      _client.on("session_event", (args) => {
+        console.log("EVENT", "session_event", args);
+      });
 
-    //   _client.on("session_update", ({ topic, params }) => {
-    //     console.log("EVENT", "session_update", { topic, params });
-    //     const { namespaces } = params;
-    //     const _session = _client.session.get(topic);
-    //     const updatedSession = { ..._session, namespaces };
-    //     onSessionConnected(updatedSession);
-    //   });
+      _client.on("session_update", ({ topic, params }) => {
+        console.log("EVENT", "session_update", { topic, params });
+        const { namespaces } = params;
+        const _session = _client.session.get(topic);
+        const updatedSession = { ..._session, namespaces };
+        onSessionConnected(updatedSession);
+      });
 
-    //   _client.on("session_delete", () => {
-    //     console.log("EVENT", "session_delete");
-    //     reset();
-    //   });
-    // },
-    // [onSessionConnected]
+      _client.on("session_delete", () => {
+        console.log("EVENT", "session_delete");
+        reset();
+      });
+    },
+    [onSessionConnected]
   );
 
   const createClient = useCallback(async () => {
@@ -177,8 +150,6 @@ export function ClientContextProvider({ children }) {
           icons: ["https://walletconnect.com/walletconnect-logo.png"],
         },
       });
-
-      console.log("CREATED CLIENT: ", _client);
       setClient(_client);
       await _subscribeToEvents(_client);
     } catch (err) {
@@ -202,9 +173,17 @@ export function ClientContextProvider({ children }) {
       client,
       session,
       connect,
-      disconnect,
+      disconnect
     }),
-    [pairings, isInitializing, accounts, client, session, connect, disconnect]
+    [
+      pairings,
+      isInitializing,
+      accounts,
+      client,
+      session,
+      connect,
+      disconnect
+    ]
   );
 
   return (
