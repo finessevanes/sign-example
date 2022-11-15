@@ -19,12 +19,10 @@ export function ClientContextProvider({ children }) {
   const [pairings, setPairings] = useState([]);
   const [session, setSession] = useState();
   const [accounts, setAccounts] = useState([]);
-  const [chains, setChains] = useState([]);
 
   const reset = () => {
     setSession(undefined);
     setAccounts([]);
-    setChains([]);
   };
 
   const onSessionConnected = useCallback(async (_session) => {
@@ -77,7 +75,7 @@ export function ClientContextProvider({ children }) {
         QRCodeModal.close();
       }
     },
-    [chains, client, onSessionConnected]
+    [ client, onSessionConnected ]
   );
 
   const disconnect = useCallback(async () => {
