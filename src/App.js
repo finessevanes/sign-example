@@ -1,13 +1,10 @@
+import { useState } from "react";
 import { useWalletConnectClient } from "./context/ClientContext";
 
 function App() {
-  const {
-    accounts,
-    client,
-    session,
-    connect,
-    disconnect,
-  } = useWalletConnectClient();
+  const [txnURL, setTxnURL] = useState();
+  const { accounts, client, session, connect, disconnect } =
+    useWalletConnectClient();
 
   const onConnect = () => {
     try {
@@ -25,36 +22,42 @@ function App() {
 
   async function onSendTransaction() {
     try {
-      const account = accounts[0];
-      if (account === undefined) throw new Error(`Account not found`);
+      if (client) {
+        const account = accounts[0];
+        if (account === undefined) throw new Error(`Account not found`);
 
-      // Goerli Account 1 from WalletConnect wallet
-      // 0xEc57410F1F15df337b54c66BD98F1702B407cB22
-      const tx = {
-        from: "0xEc57410F1F15df337b54c66BD98F1702B407cB22",
-        to: "0xEc57410F1F15df337b54c66BD98F1702B407cB22",
-        gasPrice: "0x047a8f8c",
-        gasLimit: "0x5208",
-        value: "0x00",
-      };
+        // Goerli Account 1 from WalletConnect wallet
+        // 0xEc57410F1F15df337b54c66BD98F1702B407cB22
+        const tx = {
+          from: "0xEc57410F1F15df337b54c66BD98F1702B407cB22",
+          to: "0xEc57410F1F15df337b54c66BD98F1702B407cB22",
+          data: "0x",
+          gasPrice: "0x029104e28c",
+          gasLimit: "0x5208",
+          value: "0x00",
+        };
 
-      const result = await client.request({
-        topic: session.topic,
-        chainId: "eip155:5",
-        request: {
-          method: "eth_signTransaction",
-          params: [tx],
-        },
-      });
+        const result = await client.request({
+          topic: session.topic,
+          chainId: "eip155:5",
+          request: {
+            method: "eth_sendTransaction",
+            params: [tx],
+          },
+        });
 
-      return {
-        method: "eth_sendTransaction",
-        address: "0xEc57410F1F15df337b54c66BD98F1702B407cB22",
-        valid: true,
-        result,
-      };
+        setTxnURL(result);
+
+        return {
+          method: "eth_sendTransaction",
+          address: "0xEc57410F1F15df337b54c66BD98F1702B407cB22",
+          valid: true,
+          result,
+        };
+      }
     } catch (e) {
       console.log(e);
+    } finally {
     }
   }
 
@@ -72,6 +75,18 @@ function App() {
             .slice(37)}`}</h2>
           <button onClick={onSendTransaction}>eth_sendTransaction</button>
           <button onClick={onDisconnect}>Disconnect</button>
+          {txnURL && (
+            <h2>
+              Check it out{" "}
+              <a
+                href={`https://goerli.etherscan.io/tx/${txnURL}`}
+                target="_blank"
+              >
+                here
+              </a>
+            </h2>
+          )}
+          <h2></h2>
         </>
       )}
     </div>

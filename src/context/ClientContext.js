@@ -18,7 +18,6 @@ export function ClientContextProvider({ children }) {
   const [client, setClient] = useState();
   const [pairings, setPairings] = useState([]);
   const [session, setSession] = useState();
-  const [isInitializing, setIsInitializing] = useState(false);
   const [accounts, setAccounts] = useState([]);
   const [chains, setChains] = useState([]);
 
@@ -127,14 +126,12 @@ export function ClientContextProvider({ children }) {
 
   const createClient = useCallback(async () => {
     try {
-      setIsInitializing(true);
-
       const _client = await SignClient.init({
         projectId: process.env.REACT_APP_PROJECT_ID,
         metadata: {
           name: "Example Dapp",
           description: "Example Dapp",
-          url: "wwww.m3mento.xyz",
+          url: "wwww.finessevanes.xyz",
           icons: ["https://walletconnect.com/walletconnect-logo.png"],
         },
       });
@@ -142,8 +139,6 @@ export function ClientContextProvider({ children }) {
       await _subscribeToEvents(_client);
     } catch (err) {
       throw err;
-    } finally {
-      setIsInitializing(false);
     }
   }, [_subscribeToEvents]);
 
@@ -156,7 +151,6 @@ export function ClientContextProvider({ children }) {
   const value = useMemo(
     () => ({
       pairings,
-      isInitializing,
       accounts,
       client,
       session,
@@ -165,7 +159,6 @@ export function ClientContextProvider({ children }) {
     }),
     [
       pairings,
-      isInitializing,
       accounts,
       client,
       session,
