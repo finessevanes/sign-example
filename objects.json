@@ -1,0 +1,67 @@
+// session
+
+{
+    "topic": "53ba6f9c74d58c49a3e2fee560bdeacbdbff188db087c0a82b93362d6d730b06",
+    "relay": {
+        "protocol": "irn"
+    },
+    "expiry": 1669073317,
+    "namespaces": {
+        "eip155": {
+            "accounts": [
+                "eip155:5:0xEc57410F1F15df337b54c66BD98F1702B407cB22"
+            ],
+            "methods": [
+                "eth_sendTransaction",
+                "eth_signTransaction",
+                "eth_sign",
+                "personal_sign",
+                "eth_signTypedData"
+            ],
+            "events": [
+                "chainChanged",
+                "accountsChanged"
+            ]
+        }
+    },
+    "acknowledged": true,
+    "controller": "811e41610605d821314fc933c3f59d23779e5452a0ef61ae4fdad61ca6b04619",
+    "self": {
+        "publicKey": "027cb37d535e43cdd40831ca125f294ea4ae8d0fbbc49859505e4cf9d811f835",
+        "metadata": {
+            "description": "",
+            "url": "http://localhost:3000",
+            "icons": [],
+            "name": ""
+        }
+    },
+    "peer": {
+        "publicKey": "811e41610605d821314fc933c3f59d23779e5452a0ef61ae4fdad61ca6b04619",
+        "metadata": {
+            "name": "React Wallet",
+            "description": "React Wallet for WalletConnect",
+            "url": "https://walletconnect.com/",
+            "icons": [
+                "https://avatars.githubusercontent.com/u/37784886"
+            ]
+        }
+    },
+    "requiredNamespaces": {
+        "eip155": {
+            "methods": [
+                "eth_sendTransaction",
+                "eth_signTransaction",
+                "eth_sign",
+                "personal_sign",
+                "eth_signTypedData"
+            ],
+            "chains": [
+                "eip155:5"
+            ],
+            "events": [
+                "chainChanged",
+                "accountsChanged"
+            ]
+        }
+    }
+}
