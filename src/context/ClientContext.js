@@ -8,28 +8,19 @@ import {
 } from "react";
 import SignClient from "@walletconnect/sign-client";
 import QRCodeModal from "@walletconnect/qrcode-modal";
-import { getAppMetadata, getSdkError } from "@walletconnect/utils";
+import { getSdkError } from "@walletconnect/utils";
 
 // context
 export const ClientContext = createContext();
 
 // provider
-
 export function ClientContextProvider({ children }) {
   const [client, setClient] = useState();
   const [pairings, setPairings] = useState([]);
   const [session, setSession] = useState();
-
-  //   const [isFetchingBalances, setIsFetchingBalances] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
-  //   const prevRelayerValue = useRef<string>("");
   const [accounts, setAccounts] = useState([]);
-  //   const [solanaPublicKeys, setSolanaPublicKeys] =
-  //     useState<Record<string, PublicKey>>();
   const [chains, setChains] = useState([]);
-  //   const [relayerRegion, setRelayerRegion] = useState<string>(
-  //     DEFAULT_RELAY_URL!
-  //   );
 
   const reset = () => {
     setSession(undefined);
@@ -71,7 +62,6 @@ export function ClientContextProvider({ children }) {
           requiredNamespaces,
         });
 
-        // Open QRCode modal if a URI was returned (i.e. we're not connecting an existing pairing).
         if (uri) {
           QRCodeModal.open(uri, () => {
             console.log("EVENT", "QR Code Modal closed");
@@ -81,7 +71,6 @@ export function ClientContextProvider({ children }) {
         const session = await approval();
         console.log("Established session:", session);
         await onSessionConnected(session);
-        // Update known pairings after session is connected.
         setPairings(client.pairing.getAll({ active: true }));
       } catch (e) {
         console.error(e);
@@ -103,7 +92,6 @@ export function ClientContextProvider({ children }) {
       topic: session.topic,
       reason: getSdkError("USER_DISCONNECTED"),
     });
-    // Reset app state after disconnect.
     reset();
   }, [client, session]);
 

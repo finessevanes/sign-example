@@ -16,11 +16,11 @@ function App() {
 
   const onConnect = () => {
     try {
-      if (client){
+      if (client) {
         connect();
       }
-    } catch(e){
-      console.log(e)
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -32,13 +32,16 @@ function App() {
     <div className="app">
       <h1>Sign V2</h1>
       {!accounts.length ? (
-        <button onClick={onConnect} disabled={!client}>Connect</button>
+        <button onClick={onConnect} disabled={!client}>
+          Connect
+        </button>
       ) : (
         <>
-        <h2>{`${accounts[0].slice(9).slice(0, 5)} ... ${accounts[0].slice(9).slice(37)}`}</h2>
-        <button>eth_sendTransaction</button>
-        <button>personal_sign</button>
-        <button onClick={onDisconnect}>Disconnect</button>
+          <h2>{`${accounts[0].slice(9).slice(0, 5)} ... ${accounts[0]
+            .slice(9)
+            .slice(37)}`}</h2>
+          <button>eth_sendTransaction</button>
+          <button onClick={onDisconnect}>Disconnect</button>
         </>
       )}
     </div>
