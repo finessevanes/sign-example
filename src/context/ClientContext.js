@@ -44,7 +44,7 @@ export function ClientContextProvider({ children }) {
       if (typeof client === "undefined") {
         throw new Error("WalletConnect is not initialized");
       }
-      console.log("connect, pairing topic is:", pairing?.topic);
+
       try {
         const requiredNamespaces = {
           eip155: {
@@ -66,7 +66,9 @@ export function ClientContextProvider({ children }) {
         });
 
         if (uri) {
-          ModalCtrl.open({uri, standaloneChains: ["eip155:5"]})
+          ModalCtrl.open({ uri, standaloneChains: ["eip155:5"] });
+          await approval()
+          ModalCtrl.close()
         }
 
         const session = await approval();
