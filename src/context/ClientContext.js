@@ -7,11 +7,17 @@ import {
   useContext,
 } from "react";
 import SignClient from "@walletconnect/sign-client";
-import QRCodeModal from "@walletconnect/qrcode-modal";
 import { getSdkError } from "@walletconnect/utils";
+import { ConfigCtrl as ModalConfigCtrl, ModalCtrl } from "@web3modal/core";
+import "@web3modal/ui";
 
 // context
 export const ClientContext = createContext();
+
+ModalConfigCtrl.setConfig({
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  theme: "light",
+});
 
 // provider
 export function ClientContextProvider({ children }) {
@@ -60,22 +66,19 @@ export function ClientContextProvider({ children }) {
         });
 
         if (uri) {
-          QRCodeModal.open(uri, () => {
-            console.log("EVENT", "QR Code Modal closed");
-          });
+          ModalCtrl.open({uri, standaloneChains: ["eip155:5"]})
         }
 
         const session = await approval();
-        console.log("Established session:", session);
         await onSessionConnected(session);
         setPairings(client.pairing.getAll({ active: true }));
       } catch (e) {
         console.error(e);
       } finally {
-        QRCodeModal.close();
+        ModalCtrl.close();
       }
     },
-    [ client, onSessionConnected ]
+    [client, onSessionConnected]
   );
 
   const disconnect = useCallback(async () => {
@@ -153,16 +156,9 @@ export function ClientContextProvider({ children }) {
       client,
       session,
       connect,
-      disconnect
+      disconnect,
     }),
-    [
-      pairings,
-      accounts,
-      client,
-      session,
-      connect,
-      disconnect
-    ]
+    [pairings, accounts, client, session, connect, disconnect]
   );
 
   return (

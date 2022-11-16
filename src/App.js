@@ -57,7 +57,6 @@ function App() {
       }
     } catch (e) {
       console.log(e);
-    } finally {
     }
   }
 
@@ -81,6 +80,7 @@ function App() {
               <a
                 href={`https://goerli.etherscan.io/tx/${txnURL}`}
                 target="_blank"
+                rel="noreferrer"
               >
                 here
               </a>
