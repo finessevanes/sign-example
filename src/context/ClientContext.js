@@ -11,7 +11,6 @@ import { getSdkError } from "@walletconnect/utils";
 import { ConfigCtrl as ModalConfigCtrl, ModalCtrl } from "@web3modal/core";
 import "@web3modal/ui";
 
-// context
 export const ClientContext = createContext();
 
 ModalConfigCtrl.setConfig({
@@ -19,7 +18,7 @@ ModalConfigCtrl.setConfig({
   theme: "light",
 });
 
-// provider
+
 export function ClientContextProvider({ children }) {
   const [client, setClient] = useState();
   const [pairings, setPairings] = useState([]);
@@ -66,9 +65,7 @@ export function ClientContextProvider({ children }) {
         });
 
         if (uri) {
-          ModalCtrl.open({ uri, standaloneChains: ["eip155:5"] });
-          await approval()
-          ModalCtrl.close()
+          ModalCtrl.open({ uri, standaloneChains: ['eip155:5'] });
         }
 
         const session = await approval();
@@ -166,6 +163,7 @@ export function ClientContextProvider({ children }) {
   return (
     <ClientContext.Provider value={{ ...value }}>
       {children}
+      <w3m-modal></w3m-modal>
     </ClientContext.Provider>
   );
 }
