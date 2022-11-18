@@ -131,7 +131,7 @@ export function ClientContextProvider({ children }) {
         metadata: {
           name: "Example Dapp",
           description: "Example Dapp",
-          url: "wwww.finessevanes.xyz",
+          url: "wwww.waleltconnect.com",
           icons: ["https://walletconnect.com/walletconnect-logo.png"],
         },
       });
